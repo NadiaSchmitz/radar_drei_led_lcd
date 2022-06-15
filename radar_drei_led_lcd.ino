@@ -11,10 +11,10 @@ int entfernung;
 int zeit;
 
 void setup() {
+  Serial.begin(9600);
   lcd.init();   
   lcd.backlight();
   
-  Serial.begin(9600);
   pinMode(echo_pin, INPUT);
   pinMode(trig_pin, OUTPUT);
   pinMode(led_rot, OUTPUT);
@@ -23,26 +23,34 @@ void setup() {
 }
 
 void loop() {
-  lcd.setCursor(0,0);
-  lcd.print("Hallo!");
-  
-  delay(1000);
   
   digitalWrite(trig_pin, HIGH);
   delay(1000);
   digitalWrite(trig_pin, LOW);
   zeit = pulseIn(echo_pin, HIGH);
   entfernung = (zeit / 2) / 29.1;
-
+ Serial.print("Entfernung ");
   if (entfernung < 10) {
+    lcd.setCursor(0,0);
+    lcd.println("Gefahr          ");
+    lcd.setCursor(0,1);
+    lcd.println("*** Rot ***          ");
     digitalWrite(led_rot, HIGH);  
     digitalWrite(led_gelb, LOW);
     digitalWrite(led_gruen, LOW);
   } else if (entfernung >= 10 & entfernung < 20) {
+    lcd.setCursor(0,0);
+    lcd.println("Warnung          ");
+    lcd.setCursor(0,1);
+    lcd.println("*** Gelb ***          ");
     digitalWrite(led_rot, LOW);  
     digitalWrite(led_gelb, HIGH);
     digitalWrite(led_gruen, LOW);
   } else {
+    lcd.setCursor(0,0);
+    lcd.println("Ruhe              ");
+    lcd.setCursor(0,1);
+    lcd.println("*** Gruen ***          ");
     digitalWrite(led_rot, LOW);  
     digitalWrite(led_gelb, LOW);
     digitalWrite(led_gruen, HIGH);
